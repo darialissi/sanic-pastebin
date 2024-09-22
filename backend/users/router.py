@@ -2,17 +2,16 @@ from sanic import Blueprint, HTTPResponse, response
 from sanic.request import Request
 from sanic_ext import openapi
 
+from config import settings
+
 from .repository import UsersRepository
 from .schema import UserSchemaAdd
 from .service import UsersService
-from .token_storage import TokenStorage
-
 
 router = Blueprint("Auth")
 
 service = UsersService(
     users_repo=UsersRepository,
-    token_storage=TokenStorage,
 )
 
 
@@ -29,4 +28,5 @@ async def signin(request: Request) -> HTTPResponse:
         user = await service.add_user(request.ctx.session, request.json)
     token = await service.auth_user(user)
     resp = response.json({"token": token})
+    resp.add_cookie(key="jwt-token", value=token, max_age=60 * settings.TOKEN_EXPIRE_MINUTES, httponly=True)
     return resp

@@ -11,9 +11,6 @@ class Settings(BaseSettings):
     DB_PASS: str
     DB_NAME: str
 
-    REDIS_HOST: str
-    REDIS_PORT: int
-
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str
     AWS_REGION: str
@@ -21,10 +18,6 @@ class Settings(BaseSettings):
     @property
     def DATABASE_URL_asyncpg(self):
         return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-
-    @property
-    def REDIS_URL(self):
-        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}"
 
     model_config = SettingsConfigDict(env_file=".env")
 

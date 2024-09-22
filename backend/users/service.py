@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.storage.redis import RedisStorage
 from backend.storage.repository import AbstractRepository
 from backend.utils.auth.password import Password
 from backend.utils.auth.token import Token
@@ -12,9 +11,8 @@ from .schema import UserSchema
 
 
 class UsersService:
-    def __init__(self, users_repo: AbstractRepository, token_storage: RedisStorage):
+    def __init__(self, users_repo: AbstractRepository):
         self.users_repo: AbstractRepository = users_repo()
-        self.token_storage: RedisStorage = token_storage()
 
     async def add_user(self, session: AsyncSession, user: dict):
         password = user.pop("password")
@@ -27,9 +25,6 @@ class UsersService:
         payload = {"sub": user.id}
         token = Token.encode_jwt(
             payload, private_key=settings.TOKEN_KEY_SECRET, expire=timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)
-        )
-        await self.token_storage.set_value(
-            key=f"user:{user.id}", value=token, expire=timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)
         )
         return token
 

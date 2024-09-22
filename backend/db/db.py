@@ -3,7 +3,6 @@ from sqlalchemy.orm import DeclarativeMeta, declarative_base
 
 from config import settings
 
-
 Base: DeclarativeMeta = declarative_base()
 
 engine = create_async_engine(settings.DATABASE_URL_asyncpg, echo=True)

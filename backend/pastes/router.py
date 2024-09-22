@@ -27,9 +27,11 @@ async def add_paste(request: Request) -> HTTPResponse:
     """
     Create new paste [need auth]
     """
-    if not request.token:
-        raise SanicException("You are unauthorized", status_code=401)
-    decoded = Token.decode_jwt(private_key=settings.TOKEN_KEY_SECRET, token=request.token)
+    try:
+        token = request.cookies.get("jwt-token")
+    except Exception:
+        raise SanicException("You are unauthorized!", status_code=401)
+    decoded = Token.decode_jwt(private_key=settings.TOKEN_KEY_SECRET, token=token)
     user_id = decoded.get("sub")
     request.json.update({"user_id": user_id})
     uri = await service.add_paste(request.ctx.session, request.json)
@@ -41,9 +43,11 @@ async def get_user_pastes(request: Request) -> HTTPResponse:
     """
     Get user pastes [need auth]
     """
-    if not request.token:
-        raise SanicException("You are unauthorized", status_code=401)
-    decoded = Token.decode_jwt(private_key=settings.TOKEN_KEY_SECRET, token=request.token)
+    try:
+        token = request.cookies.get("jwt-token")
+    except Exception:
+        raise SanicException("You are unauthorized!", status_code=401)
+    decoded = Token.decode_jwt(private_key=settings.TOKEN_KEY_SECRET, token=token)
     user_id = decoded.get("sub")
     resp = await service.get_user_pastes(request.ctx.session, user_id=user_id)
     if not resp:

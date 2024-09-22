@@ -13,7 +13,6 @@ services:
     restart: always
     depends_on:
       - db
-      - redis
 
   db:
     container_name: postgres_container
@@ -22,11 +21,4 @@ services:
       - .env-docker
     ports:
       - '5435:5432'
-    restart: always
-
-  redis:
-    container_name: redis_container
-    image: redis:alpine
-    ports:
-      - '6381:6379'
     restart: always
