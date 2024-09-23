@@ -14,4 +14,4 @@ RUN poetry config virtualenvs.create false && \
 
 COPY . .
 
-CMD poetry run python server.py
+CMD ["python", "server.py"]

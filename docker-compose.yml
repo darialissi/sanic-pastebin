@@ -20,5 +20,5 @@ services:
     env_file:
       - .env-docker
     ports:
-      - '5435:5432'
+      - '5432:5432'
     restart: always

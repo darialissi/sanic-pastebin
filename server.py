@@ -14,12 +14,12 @@ app.blueprint(f_router)
 
 
 @app.after_server_start
-async def create_db_tables(app):
+async def create_db_tables(app, loop):
     await create_tables()
 
 
 @app.before_server_stop
-async def drop_db_tables(app):
+async def drop_db_tables(app, loop):
     await drop_tables()
 
 
@@ -42,6 +42,7 @@ async def prevent_xss(request, response):
 if __name__ == "__main__":  # ASGI
     uvicorn.run(
         app=app,
+        loop="none",
         host="0.0.0.0",
         port=8000,
     )
