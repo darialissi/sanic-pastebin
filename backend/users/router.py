@@ -4,22 +4,17 @@ from sanic_ext import openapi
 
 from config import settings
 
-from .repository import UsersRepository
 from .schema import UserSchemaAdd
 from .service import UsersService
 
 router = Blueprint("Auth")
-
-service = UsersService(
-    users_repo=UsersRepository,
-)
 
 
 @router.post("/signin")
 @openapi.definition(
     body={"application/json": UserSchemaAdd.model_json_schema(ref_template="#/components/schemas/{model}")},
 )
-async def signin(request: Request) -> HTTPResponse:
+async def signin(request: Request, service: UsersService) -> HTTPResponse:
     """
     Get JWT token
     """

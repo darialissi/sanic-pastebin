@@ -6,24 +6,17 @@ from sanic_ext import openapi
 from backend.utils.auth.token import Token
 from config import settings
 
-from .object_storage import PastesStorage
-from .repository import PastesRepository
-from .schema import PasteSchemaAdd, PasteURI
+from .schema import PasteSchemaAdd
 from .service import PastesService
 
 router = Blueprint("Pastes", url_prefix="/pastes")
-
-service = PastesService(
-    pastes_repo=PastesRepository,
-    object_storage=PastesStorage,
-)
 
 
 @router.post("/")
 @openapi.definition(
     body={"application/json": PasteSchemaAdd.model_json_schema(ref_template="#/components/schemas/{model}")},
 )
-async def add_paste(request: Request) -> HTTPResponse:
+async def add_paste(request: Request, service: PastesService) -> HTTPResponse:
     """
     Create new paste [need auth]
     """
@@ -39,7 +32,7 @@ async def add_paste(request: Request) -> HTTPResponse:
 
 
 @router.get("/")
-async def get_user_pastes(request: Request) -> HTTPResponse:
+async def get_user_pastes(request: Request, service: PastesService) -> HTTPResponse:
     """
     Get user pastes [need auth]
     """
@@ -55,8 +48,8 @@ async def get_user_pastes(request: Request) -> HTTPResponse:
     return response.json(resp)
 
 
-@router.get("/<uri>")  # no auth needed
-async def get_paste(request: Request, uri: PasteURI) -> HTTPResponse:
+@router.get("/<uri:str>")  # no auth needed
+async def get_paste(request: Request, service: PastesService, uri: str) -> HTTPResponse:
     """
     Get paste by URI
     """

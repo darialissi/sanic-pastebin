@@ -13,4 +13,4 @@ class User(Base):
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
 
-    pastes: Mapped[set["Paste"]] = relationship(back_populates="user")  # type: ignore
+    pastes: Mapped[set["Paste"]] = relationship(back_populates="user")  # type: ignore # noqa: F821

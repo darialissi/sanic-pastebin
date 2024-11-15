@@ -15,7 +15,7 @@ class Paste(Base):
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
 
-    user: Mapped["User"] = relationship(back_populates="pastes")  # type: ignore
+    user: Mapped["User"] = relationship(back_populates="pastes")  # type: ignore # noqa: F821
 
     def to_dict(self):
         return {

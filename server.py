@@ -2,7 +2,9 @@ import uvicorn
 from sanic import Blueprint, Sanic
 
 from backend.db.db import async_session, create_tables, drop_tables
+from backend.pastes.dependencies import paste_service
 from backend.pastes.router import router as p_router
+from backend.users.dependencies import user_service
 from backend.users.router import router as u_router
 from frontend.router import router as f_router
 
@@ -11,6 +13,10 @@ app = Sanic("Pastebin")
 api = Blueprint.group(u_router, p_router, name_prefix="API", url_prefix="/api")
 app.blueprint(api)
 app.blueprint(f_router)
+
+
+app.ext.dependency(user_service)
+app.ext.dependency(paste_service)
 
 
 @app.after_server_start
