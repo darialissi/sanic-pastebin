@@ -22,6 +22,8 @@ class PastesService:
 
     async def get_paste(self, session: AsyncSession, uri: PasteURI) -> PasteSchema:
         info = await self.pastes_repo.get_one(session, uri=uri)
+        if not info:
+            raise
         i_dict = info.to_dict()
         body = await self.object_storage.get_object(object_name=uri)
         i_dict.update({"text": body})

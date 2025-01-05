@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pastebin</title>
-<style>
-  body {
+body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -13,21 +6,21 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
-    header {
+}
+header {
     background-color: #4a86e8;
     padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  .logo {
+}
+.logo {
     color: white;
     font-size: 1.5rem;
     font-weight: bold;
     text-decoration: none;
-  }
-  .new-paste-btn {
+}
+.new-paste-btn {
     background-color: white;
     color: #4a86e8;
     border: none;
@@ -37,43 +30,43 @@
     border-radius: 4px;
     transition: background-color 0.3s ease;
     text-decoration: none;
-  }
-  .new-paste-btn:hover {
+}
+.new-paste-btn:hover {
     background-color: #e6e6e6;
-  }
-  main {
+}
+main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 2rem;
-  }
-  .paste-container {
+}
+.paste-container {
     width: 80%;
     max-width: 800px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     overflow: hidden;
-  }
-  .paste-header {
+}
+.paste-header {
     background-color: #f8f9fa;
     padding: 1rem;
     border-bottom: 1px solid #e9ecef;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  .paste-title {
+}
+.paste-title {
     font-size: 1.2rem;
     font-weight: bold;
     margin: 0;
-  }
-  .paste-date {
+}
+.paste-date {
     color: #6c757d;
     font-size: 0.9rem;
-  }
-  .paste-content {
+}
+.paste-content {
     padding: 1rem;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -82,33 +75,8 @@
     line-height: 1.5;
     max-height: 500px;
     overflow-y: auto;
-  }
-  .loading {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #6c757d;
-    margin-top: 2rem;
-  }
-  .error {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #dc3545;
-    margin-top: 2rem;
-  }
-  .signin-btn {
-    background-color: white;
-    color: #4a86e8;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    }
-  .signin-btn:hover {
-    background-color: #e6e6e6;
-    }
-  #paste-content {
+}
+#paste-content {
     width: 80%;
     height: 300px;
     margin-bottom: 1rem;
@@ -117,8 +85,48 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
+}
+#paste-link {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background-color: #e6e6e6;
+    border-radius: 4px;
+    font-family: monospace;
+    display: none;
+}
+#pasteResultModal .modal-content {
+    width: 60%;
+    max-width: 600px;
+}
+#pasteResult {
+    word-break: break-all;
+}
+.loading {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-top: 2rem;
+}
+.error {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #dc3545;
+    margin-top: 2rem;
+}
+.signin-btn {
+    background-color: white;
+    color: #4a86e8;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+.signin-btn:hover {
+    background-color: #e6e6e6;
     }
-  .create-paste-btn {
+.create-paste-btn {
     background-color: #4a86e8;
     color: white;
     border: none;
@@ -127,19 +135,11 @@
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
-    }
-  .create-paste-btn:hover {
+}
+.create-paste-btn:hover {
     background-color: #3a76d8;
-    }
-  #paste-link {
-    margin-top: 1rem;
-    padding: 0.5rem;
-    background-color: #e6e6e6;
-    border-radius: 4px;
-    font-family: monospace;
-    display: none;
-    }
-  .modal {
+}
+.modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -148,43 +148,43 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.4);
-    }
-  .modal-content {
+}
+.modal-content {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 300px;
     border-radius: 8px;
-    }
-  .close {
+}
+.close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-    }
-  .close:hover,
-  .close:focus {
+}
+.close:hover,
+.close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
-    }
-  .form-group {
+}
+.form-group {
     margin-bottom: 15px;
-    }
-  .form-group label {
+}
+.form-group label {
     display: block;
     margin-bottom: 5px;
-    }
-  .form-group input {
+}
+.form-group input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
-    }
-  .signin-form-btn {
+}
+.signin-form-btn {
     width: 100%;
     padding: 10px;
     background-color: #4a86e8;
@@ -192,36 +192,21 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    }
-  .signin-form-btn:hover {
+}
+.signin-form-btn:hover {
     background-color: #3a76d8;
-    }  
-  #message {
+}  
+#message {
     margin-top: 10px;
     padding: 10px;
     border-radius: 4px;
     display: none;
     }
-  .success {
+.success {
     background-color: #d4edda;
     color: #155724;
-    }
-  .error {
+}
+.error {
     background-color: #f8d7da;
     color: #721c24;
-    }
-  #pasteResultModal .modal-content {
-    width: 60%;
-    max-width: 600px;
-    }
-  #pasteResult {
-    word-break: break-all;
-    }
-  </style>
-</head>
-<body>
-    {% block body %}
-
-    {% endblock body %}
-</body>
-</html>
+}

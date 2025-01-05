@@ -2,8 +2,8 @@ version: '3.9'
 
 services:
 
-  app:
-    container_name: sanic_container
+  backend:
+    container_name: back_container
     build:
       context: .
     env_file:
@@ -13,6 +13,16 @@ services:
     restart: always
     depends_on:
       - db
+
+  frontend:
+    container_name: front_container
+    build:
+      context: ./frontend
+    ports:
+      - '8080:8080'
+    restart: always
+    depends_on:
+      - backend
 
   db:
     container_name: postgres_container

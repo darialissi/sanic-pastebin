@@ -1,5 +1,6 @@
 import uvicorn
 from sanic import Blueprint, Sanic
+from sanic_ext import Extend
 
 from backend.db.db import async_session, create_tables, drop_tables
 from backend.pastes.dependencies import paste_service
@@ -9,6 +10,8 @@ from backend.users.router import router as u_router
 from frontend.router import router as f_router
 
 app = Sanic("Pastebin")
+app.config.CORS_ORIGINS = "*"
+Extend(app)
 
 api = Blueprint.group(u_router, p_router, name_prefix="API", url_prefix="/api")
 app.blueprint(api)

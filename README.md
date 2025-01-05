@@ -5,8 +5,9 @@
 - **cd sanic-pastebin && docker-compose up**
 
 #
-Приложение доступно на <http://127.0.0.1:8000>
-![Pastebin](app.png)
+Приложение доступно на <http://127.0.0.1:8080>
+![Pastebin-index](app.png)
+![Pastebin-sample](app-2.png)
 
 Документация **Swagger UI** доступна на <http://127.0.0.1:8000/docs/swagger>
 ![Swagger](docs.png)

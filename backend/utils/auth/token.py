@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
 import jwt
-from sanic.exceptions import SanicException
 
 
 class Token:
@@ -31,7 +30,8 @@ class Token:
         token: str,
         private_key: str,
     ):
+        token = token.replace("Bearer", "").strip()
         try:
             return jwt.decode(token, private_key, algorithms=["HS256"])
         except jwt.exceptions.InvalidTokenError:
-            raise SanicException("You are unauthorized", status_code=401)
+            raise
