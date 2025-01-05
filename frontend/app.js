@@ -11,6 +11,9 @@ async function getResponse(url, method, body) {
         },
         body: JSON.stringify(body),
     })
+    if (response.status == 401) {
+        throw new Error('Please Sign In')
+    }
     if (!response.ok) {
         throw new Error(`${response.status}: ${response.statusText}`)
     }
@@ -34,23 +37,26 @@ btnSubmit.onclick = async function(e) {
     if (!pattern.exec(username) || !pattern.exec(password)) {
         alert('Fields can contain only latin characters;\nThe minimal length of fields is 5.');
         return;
-    }
+    };
+
+    let data = {};
     
     // Send API request to '/signin'
     try {
-        const data = await getResponse('http://127.0.0.1:8000/api/signin', 'POST', { username, password })
-        if (data.token) 
-            {
-                sessionStorage.setItem('token', data.token);
-                alert('Sign in successful!');
-                modal.style.display = "none";
-            } else {
-                alert(`Sign in failed: ${data.message}`);
-            }
-    } catch(e) {
+        data = await getResponse('http://127.0.0.1:8000/api/signin', 'POST', { username, password })
+      } catch(e) {
         console.error('Error:', e);
         alert(`Sign in failed: ${e}`);
+        return;
     };
+
+    if (data.token) {
+        sessionStorage.setItem('token', data.token);
+        alert('Sign in successful!');
+        modal.style.display = "none";
+        } else {
+          alert(`Sign in failed: ${data.message}`);
+      };
   };
 
 btn.onclick = function() {
@@ -72,27 +78,30 @@ async function createPaste(text) {
 
     const result = document.getElementById('pasteResult');
     const modal = document.getElementById('pasteResultModal');
-        
+
+    let data = {};
+      
     // Send API request to '/pastes'
     try {
-      const data = await getResponse('http://127.0.0.1:8000/api/pastes', 'POST',  { text })
-      if (data.uri) {
-          const pasteLink = `http://127.0.0.1:8000/${data.uri}`;
-          result.textContent = `Paste created successfully! Link: ${pasteLink}`;
-          modal.style.display = 'block';
-                
-          // Clear the textarea
-          document.getElementById('paste-content').value = '';
-          } else {
-          result.textContent = data.message || 'Failed to create paste. Please try again.';
-          modal.style.display = 'block';
-          }
+      data = await getResponse('http://127.0.0.1:8000/api/pastes', 'POST',  { text });
       } catch(e) {
-          console.error('Error:', error);
-          result.textContent = 'An error occurred. Please try again later.';
-          modal.style.display = 'block';
-      }
-};
+        console.error('Error:', e);
+        alert(e);
+        return;
+      };
+
+    if (data.uri) {
+      const pasteLink = `http://127.0.0.1:8000/${data.uri}`;
+      result.textContent = `Paste created successfully! Link: ${pasteLink}`;
+      modal.style.display = 'block';
+                
+      // Clear the textarea
+      document.getElementById('paste-content').value = '';
+      } else {
+      result.textContent = data.message || 'Failed to create paste. Please try again.';
+      modal.style.display = 'block';
+    };
+  };
 
 const p_modal = document.getElementById('pasteResultModal');
 const p_btn = document.querySelector('.create-paste-btn');
